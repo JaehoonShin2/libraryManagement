@@ -1,2 +1,4 @@
-package com.librarymanagement.user.controller.admin.user;public class InsertUserController {
+package com.librarymanagement.user.controller.user;
+
+public class InsertUserController {
 }

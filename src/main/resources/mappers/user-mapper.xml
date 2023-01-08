@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace : 해당 mapper 파일의 고유한 별칭, 식별자 -->
+<mapper namespace='userMapper'>
+
+    <!--
+        [ 표현법 ]
+        * INSERT, UPDATE, DELETE 문 일 경우
+        <insert id='각sql문의식별자'
+            parameterType='전달받을자바타입(풀클래스명) 혹은 mybatis의 typeAlias 에서 설정한 별칭'>
+
+            실행할 쿼리문을 작성
+
+        </insert>
+
+        => parameterType : 매꿀 값의 타입이기 때문에, 만약 완성된 쿼리문이 실행될 예정이라면 생략 가능한 속성이다.
+        => update, delete 태그도 마찬가지이다.
+        => 이 경우에는 쿼리문의 실행결과가 처리된 행이 갯수로 나옴(int)
+        => 그동안 쿼리문을 ?(위치홀더) 로 표현했다면
+        => #{필드명 또는 변수명 또는 해쉬맵의 경우에는 키값} 으로 표현한다. 또한 중괄호 안에는 띄어쓰기를 금한다.
+
+     -->
+
+    <insert id="insertUser" parameterType="user">
+        INSERT INTO MEMBER(USERNO,
+                           USERID,
+                           USERPWD,
+                           USERNAME,
+                           GENDER,
+                           PHONE) VALUES ( SEQ_UNO.NEXTVAL
+                                           , #{userId}
+                                           , #{userPwd}
+                                           , #{userName}
+                                           , #{gender}
+                                           , #{phone}
+                                           )
+    </insert>
+
+    <!--
+        [ 표현법 ]
+        <select id='각sql문의식별자'
+            parameterType='전달받을자바타입(풀클래스명) 혹은 mybatis의 typeAlias 에서 설정한 별칭'
+            resultType='조회결과를반환하고자하는자바타입(' 반일객체 혹은 반일 값 반환의 경우
+            또는
+            resultMap='조회결과를뽑아서매핑할resultMap의ID속성값' >
+
+            실행할 쿼리문을 작성
+
+            => 즉 반드시 resultType 혹은 resultMap 돌 중 하나의 속성이 필수이다!!!!
+        </select>
+
+     -->
+    <!--
+        아래의 select 문에서 member의 필드값은 userId, userPwd 등 언더바가 없지만
+        테이블에서 뽑아온 요소는 user_id 와 같이 언더바가 있어서 필드값과 일치하지 않기 때문에
+        자동적으로 member 객체에 값을 넣을 수 없어서 별도의 resultMap 으로 가공처리를 해주어야 한다.
+
+        * resultMap : 마이바티스의 핵심 기능 중 하나.
+                    ResultSet 으로부터 조회된 각 컬럼 값을 하나씩 뽑아서
+                    내가 지정한 VO 객체의 각 필드에 값을 담는 매핑과정
+                    JDBC 코드를 줄여주는 역할을 해주는 설정
+
+        [ 표현법 ]
+        <resultMap id='식별자' type='조회된결과를담아서반환하고자하는VO객체의타입(풀클래스명) 또는 별칭'>
+             <result column="조회결과를뽑고자하는DB컬럼명" property='해당결과를담고자하는필드명' />
+             <result column="조회결과를뽑고자하는DB컬럼명" property='해당결과를담고자하는필드명' />
+             <result column="조회결과를뽑고자하는DB컬럼명" property='해당결과를담고자하는필드명' />
+             <result column="조회결과를뽑고자하는DB컬럼명" property='해당결과를담고자하는필드명' />
+             <result column="조회결과를뽑고자하는DB컬럼명" property='해당결과를담고자하는필드명' />
+         </resultMap>
+
+     -->
+    <resultMap id='memberResultSet' type='member'>
+        <result  property='userNo' column='USER_NO'/>
+        <result property='userId' column='USER_ID'  />
+        <result property='userPwd' column='USER_PWD'  />
+        <result property='userName' column='USER_NAME' />
+        <result property='gender' column='GENDER'/>
+        <result property='phone' column='PHONE' />
+        <result property='enrollDate' column='ENROLL_DATE'  />
+        <result property='modifyDate'  column='MODIFY_DATE' />
+        <result property='status' column='STATUS'  />
+    </resultMap>
+
+    <select id="loginUser" parameterType="user" resultMap="memberResultSet">
+        SELECT *
+        FROM MEMBER
+        WHERE USER_ID = #{userId}
+          AND USER_PWD = #{userPwd}
+          AND STATUS = 'Y'
+    </select>
+</mapper>

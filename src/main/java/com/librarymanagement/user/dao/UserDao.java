@@ -1,2 +1,6 @@
-package com.librarymanagement.admin.user.dao;public class UserDao {
+package com.librarymanagement.user.dao;
+
+public class UserDao {
+
+
 }

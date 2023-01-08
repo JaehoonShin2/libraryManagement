@@ -1,4 +1,4 @@
-package com.librarymanagement.admin.user.vo;
+package com.librarymanagement.user.vo;
 
 public class User {
 }

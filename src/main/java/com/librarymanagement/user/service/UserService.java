@@ -1,6 +1,6 @@
-package com.librarymanagement.admin.user.service;
+package com.librarymanagement.user.service;
 
-import com.librarymanagement.admin.user.vo.User;
+import com.librarymanagement.user.vo.User;
 
 import java.util.ArrayList;
 
