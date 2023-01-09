@@ -23,6 +23,7 @@ public class User {
 	private int grade;
 	private int maxRentalCount;
 	private String status;
+	private String adminYN;
 	
 
 }

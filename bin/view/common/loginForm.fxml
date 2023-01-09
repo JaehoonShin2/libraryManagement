@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.library.user.controller.LoginFormController">
+   <children>
+      <Button fx:id="_btn_login" defaultButton="true" layoutX="415.0" layoutY="187.0" mnemonicParsing="false" prefHeight="105.0" prefWidth="120.0" text="로그인" textAlignment="CENTER" />
+      <Label layoutX="127.0" layoutY="76.0" text="도서관리 프로그램 ">
+         <font>
+            <Font size="40.0" />
+         </font>
+      </Label>
+      <Label layoutX="87.0" layoutY="198.0" text="아이디 : ">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="80.0" layoutY="261.0" text="비밀번호 : ">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <TextField fx:id="_tf_id" layoutX="167.0" layoutY="187.0" prefHeight="41.0" prefWidth="219.0" promptText="아이디를 입력하세요" />
+      <Label fx:id="_label_msg_login" layoutX="153.0" layoutY="315.0" />
+      <Hyperlink fx:id="_hy_enroll" layoutX="475.0" layoutY="330.0" text="회원가입" textFill="#070000" />
+      <Hyperlink fx:id="_hy_login" layoutX="596.0" layoutY="390.0" />
+      <PasswordField fx:id="_pf_pwd" layoutX="167.0" layoutY="250.0" prefHeight="41.0" prefWidth="219.0" promptText="비밀번호를 입력하세요" />
+   </children>
+</AnchorPane>

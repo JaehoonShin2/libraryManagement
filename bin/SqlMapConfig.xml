@@ -12,12 +12,12 @@
     <!-- settings : 마이바티스가 구동됐을 때 선언할 영역을 선언하는 태그. -->
 	<properties resource="./driver.properties" />
     <!-- tpyeAliases : VO/DTO 클래스들의 풀 클래스명을 단순한 별칭으로 사용하기 위해서 별칭을 등록할 수 있는 영역 -->
-    <settings>
-    	<setting name="jdbcTypeForNull" value="NULL"/>
+     <settings>
+        <setting name="jdbcTypeForNull" value="NULL"/>
     </settings>
     
     <typeAliases>
-        <typeAlias alias="user" type="com.library.user.vo.User" />
+        <typeAlias alias="user" type="com.library.common.vo.User" />
     </typeAliases>
     <environments default="development">
         <environment id="development">

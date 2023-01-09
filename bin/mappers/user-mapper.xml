@@ -6,6 +6,22 @@
 <!-- namespace : 해당 mapper 파일의 고유한 별칭, 식별자 -->
 <mapper namespace='userMapper'>
 
+	 <resultMap id='userResultSet' type='user'>
+        
+        <result  property='userNo' column='userNo'/>
+        <result property='userId' column='userId'  />
+        <result property='userPwd' column='userPwd'  />
+        <result property='userName' column='USERNAME' />
+        <result property='grade' column='u.grade' />
+        <result property='gender' column='gender' />
+        <result property='phone' column='phone' />
+        <result property='point' column='point' />
+        <result property='maxRentalCount' column='maxrentalcount' />
+        <result property='status' column='status' />
+        <result property='adminYN' column='adminYN' />
+        
+    </resultMap>
+
     <!--
         [ 표현법 ]
         * INSERT, UPDATE, DELETE 문 일 경우
@@ -26,18 +42,42 @@
 
     <insert id="insert" parameterType="user">
         <![CDATA[
-        INSERT INTO MEMBER( USERID
+        INSERT INTO user ( USERID
                            , USERPWD
                            , USERNAME
-                           , PHONE
                            , GENDER ) VALUES ( #{userId}
                                            , #{userPwd}
                                            , #{userName}
-                                           , #{phone}
                                            , #{gender}
                                            )
         ]]>
     </insert>
+    
+    <update id="update" parameterType="user">
+	    <![CDATA[
+	    	UPDATE USER
+	  	 	 <set>
+		      <if test="userPwd != null"> userPwd = #{userPwd}, </if>
+		      <if test="userName != null"> userName = #{userName},</if>
+		      <if test="phone != null"> phone = #{phone}, </if>
+		      <if test="gender != null"> gender = #{gender} </if>
+		      <if test="point != null"> point = #{point} </if>
+		    </set>
+	    	WHERE 1=1
+	    		<if test="userNo != null">userNo = #{userNo} </if>
+	    		<if test="userId != null">userId = #{userId} </if>
+	    ]]>
+    </update>
+    
+    <update id="delete" parameterType="user">
+    	<![CDATA[
+    		UPDATE USER
+    		SET STATUS = 'N'
+    		WHERE 1=1
+    			<if test="userNo != null">userNo = #{userNo} </if>
+	    		<if test="userId != null">userId = #{userId} </if>
+    	]]>
+    </update>
 
     <!--
         [ 표현법 ]
@@ -74,54 +114,82 @@
 
      -->
 
-
-    <resultMap id='userResultSet' type='user'>
-        <result  property='userNo' column='userNo'/>
-        <result property='userId' column='userId'  />
-        <result property='userPwd' column='password'  />
-        <result property='userName' column='USER_AME' />
-        <result property='phone' column='PHONE' />
-        <result property='maxRentalCount' column='maxrentalcount' />
-        <result property='useyn' column='useyn'  />
-    </resultMap>
-
-
-    <resultMap id='userResultSet' type='user'>
-        <result  property='userNo' column='userNo'/>
-        <result property='userId' column='userId'  />
-        <result property='userPwd' column='userPwd'  />
-        <result property='userName' column='USERNAME' />
-        <result property='grade' column='grade' />
-        <result property='gender' column='gender' />
-        <result property='phone' column='phone' />
-        <result property='point' column='point' />
-        <result property='maxrentalcount' column='maxrentalcount' />
-        <result property='status' column='status' />
-        
-        
-    </resultMap>
-
     <select id="loginUser" parameterType="user" resultMap="userResultSet">
-        SELECT *
-        FROM user
+        SELECT u.*, g.maxrentalcount
+        FROM user u
+        	join grade g
+        	on u.grade = g.grade 
         WHERE USER_ID = #{userId}
           AND USER_PWD = #{userPwd}
           AND STATUS = 'Y'
     </select>
 
-    <select id="selectOne" parameterType="user" resultMap="userSet">
+	<select id="select" parameterType="user" resultMap="userResultSet">
+        <![CDATA[
+	        SELECT u.*, g.maxrentalCount
+	        FROM user u
+	        	join grade g
+	        	on u.grade = g.grade
+			where 1=1
+				and u.userId = #{userId}
+				and u.userPwd = #{userPwd}
+				and status = 'y'
+       	]]>
+    </select>
+
+    <select id="selectOne" parameterType="user" resultMap="userResultSet">
+	        SELECT u.*, g.maxrentalCount
+	        FROM user u
+	        	join grade g
+	        	on u.grade = g.grade
+			where 1=1
+				 <if test="userId != null and !userId.equals('')">
+				    AND userId like #{userId}
+				  </if>
+				and userPwd = #{userPwd}
+    </select>
+
+	<select id="selectAll" parameterType="user" resultMap="userResultSet">
+        <![CDATA[
+	        SELECT u.*, g.maxrentalCount
+	        FROM user u
+	        	join grade g
+	        	on u.grade = g.grade
+       	]]>
+    </select>
+
+	<select id="selectAllList" parameterType="user" resultMap="userResultSet">
+        <![CDATA[
+	        SELECT u.*, g.maxrentalCount
+	        FROM user u
+	        	join grade g
+	        	on u.grade = g.grade
+	        WHERE 1=1
+	        <choose>
+			    <when test="userNo != null">
+			      AND userNo like #{userNo}
+			    </when>
+			    <when test="userId != null>
+			      AND userId like #{userId}
+			    </when>
+			    <when test="userName != null>
+			      AND userName like #{userName}
+			    </when>
+			    <otherwise>
+			      AND status = 'Y'
+			    </otherwise>
+		  </choose>
+       	]]>
+    </select>
+
+	<select id="selectIdCheck" parameterType="user" resultMap="userResultSet">
         SELECT u.*, g.maxrentalCount
         FROM user u
         	join grade g
-        	u.grade = g.grade
+        	on u.grade = g.grade
         WHERE USERID = #{userId}
-        	AND USERPWD = $#{userPwd}
         	
     </select>
 
-    <select id="selectCount" resultType="int">
-        SELECT count(*) as cnt
-        FROM user
-    </select>
-    
+
 </mapper>

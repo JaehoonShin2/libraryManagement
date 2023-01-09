@@ -8,6 +8,8 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.log4j.Logger;
 
+import com.mysql.cj.jdbc.ha.SequentialBalanceStrategy;
+
 public class Template {
 	
 	private static SqlSessionFactory sqlSessionFactory;
@@ -16,14 +18,17 @@ public class Template {
 	static {
 		
 		String resource = "SqlMapConfig.xml";
-		
+		InputStream stream = null;
 		try {
-			InputStream stream = Resources.getResourceAsStream(resource);
-			if(sqlSessionFactory == null) {
-				sqlSessionFactory = new SqlSessionFactoryBuilder().build(stream);
-			}
+			stream = Resources.getResourceAsStream(resource);
+			logger.info(stream);
 		} catch (Exception e) {
+			logger.info(stream);
 			logger.info("error");
+		}
+		
+		if(sqlSessionFactory == null) {
+			sqlSessionFactory = new SqlSessionFactoryBuilder().build(stream);
 		}
 		
 	}
