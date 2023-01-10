@@ -78,13 +78,10 @@ public class LoginFormController implements Initializable{
 			StringBuffer key = new StringBuffer();
 			StringBuffer resource = new StringBuffer();
 			if ( ShareData.getUser().getAdminYN().equals("Y")) {
-				key.append("adminSidebar");
-				resource.append("admin/adminSidebar");
-				scene = ShareData.getScene(key.toString(), resource.toString());
+				scene = ShareData.getScene("admin_Sidebar", "admin/admin_Sidebar");
 			} 
 			else if (ShareData.getUser().getAdminYN().equals("N")) {
-				key.append("libraryView");
-				resource.append("user/userSidebar");
+				scene = ShareData.getScene("libraryForm", "user/libraryForm");
 			}
 			ShareData.getStage().setScene(scene);
 			ShareData.getStage().show();

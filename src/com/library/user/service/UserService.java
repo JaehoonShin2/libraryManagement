@@ -6,17 +6,15 @@ import com.library.common.vo.User;
 
 public interface UserService {
 
-	public User insert(User user);
+	User insert(User user);
 	
-	public User update(User user);
+	User update(User user);
 	
-	public User delete(User user);
-	
-	public User selectOne(User user);
-	
-	public ArrayList<User> selectAllList();
+	User delete(User user);
 
-	public ArrayList<User> selectList(User user);
+	User select(User user);
+
+	ArrayList<User> selectList(User user);
 	
 	
 }

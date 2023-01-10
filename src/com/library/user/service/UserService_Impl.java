@@ -2,7 +2,7 @@ package com.library.user.service;
 
 import java.util.ArrayList;
 
-import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSession;
 
 import com.library.common.template.Template;
 import com.library.common.vo.User;
@@ -10,42 +10,64 @@ import com.library.user.dao.UserDao;
 
 public class UserService_Impl implements UserService {
 	
-	private SqlSessionFactory sqlSessionFactory;
+	private SqlSession sqlSession;
 	private UserDao userDao;
 	
 	public UserService_Impl() {
-		sqlSessionFactory = Template.getSqlSessionFactory();
-		userDao = new UserDao(sqlSessionFactory);
+		this.sqlSession = Template.getSqlSession();
+		userDao = new UserDao(sqlSession);
 	}
 	
 	public User insert(User user) {
-		return userDao.insert(user);
+		int result = userDao.insert(user);
+		User u = userDao.select(user);
+		if(result == 1 && u != null) {
+			sqlSession.commit();
+		} else {
+			sqlSession.rollback();
+		}
+		sqlSession.close();
+		return u;
 	}
 
 	@Override
 	public User update(User user) { 
-		return userDao.update(user);
+		int result = userDao.update(user);
+		User u = userDao.select(user);
+		if(result == 1 && u != null) {
+			sqlSession.commit();
+		} else {
+			sqlSession.rollback();
+		} 
+		sqlSession.close();
+		return u;
 	}
 
 	@Override
 	public User delete(User user) {
-		return userDao.delete(user);
+		int result = userDao.delete(user);
+		User u = userDao.select(user);
+		if(result == 1 && u == null) {
+			sqlSession.commit();
+		} else {
+			sqlSession.rollback();
+		}
+		sqlSession.close();
+		return u;
 	}
 
 	@Override
-	public User selectOne(User user) {
-		// TODO 자동 생성된 메소드 스텁
-		return null;
-	}
-
-	@Override
-	public ArrayList<User> selectAllList() {
-		return userDao.selectAllList();
+	public User select(User user) {
+		User u = userDao.select(user);
+		sqlSession.close();
+		return u;
 	}
 
 	@Override
 	public ArrayList<User> selectList(User user) {
-		return userDao.selectList(user);
+		ArrayList<User> list = userDao.selectList(user);
+		sqlSession.close();
+		return list;
 	}
 
 }

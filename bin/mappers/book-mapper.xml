@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace : 해당 mapper 파일의 고유한 별칭, 식별자 -->
+<mapper namespace='bookMapper'>
+
+	 <resultMap id='bookResultSet' type='book'>
+        <result  property='isbn' column='isbn'/>
+        <result property='title' column='title'  />
+        <result property='date' column='date'  />
+        <result property='page' column='page' />
+        <result property='price' column='price' />
+        <result property='author' column='author' />
+        <result property='translator' column='translator' />
+        <result property='publisher' column='publisher' />
+        <result property='bimgurl' column='bimgurl' />
+        <result property='status' column='status' />
+        <result property='rentYN' column='rentYN' />
+    </resultMap>
+
+
+    <insert id="insert" parameterType="book">
+		INSERT INTO book 
+			VALUES
+			( #{isbn}
+				,  #{title}
+				, #{date}
+				, #{page}
+				, #{page}
+				, #{price}
+				, #{author}
+				, #{translator}
+				, #{publisher}
+				, #{bimgurl}
+				, default
+				default
+			)
+
+    </insert>
+    
+    <update id="update" parameterType="book">
+   		update book
+   		<set>
+   			<if test=""> ,</if>
+   			<if test=""> ,</if>
+   			<if test=""> ,</if>
+   			<if test=""> ,</if>
+   			<if test=""> ,</if>
+   			<if test=""> ,</if>
+   		</set>
+   		where 1=1
+   			and isbn = #{isbn}
+    </update> 
+
+    <update id="delete" parameterType="book">
+   		update book
+   		set
+   		status = 'N'
+   		where 1=1
+   			and isbn = #{isbn}
+    </update> 
+
+
+	<select id="select" parameterType="book" resultMap="bookResultSet">
+		SELECT b.*, ifnull(rr.status, 'Y') as 'rentYN'
+		FROM book b 
+		left outer JOIN ( SELECT r.*
+								FROM (SELECT isbn, status
+									, RANK() OVER(PARTITION BY isbn ORDER BY rentalno DESC) AS `rank`
+										FROM rental) AS r
+								WHERE r.rank = 1
+								) AS rr
+		ON b.isbn = rr.isbn
+		WHERE b.isbn = #{isbn}
+		and b.status = 'Y'
+	</select>
+
+	<select id="selectList" parameterType="book" resultMap="bookResultSet">
+		SELECT b.*, ifnull(rr.status, 'Y') as 'rentYN'
+		FROM book b 
+		left outer JOIN ( SELECT r.*
+								FROM (SELECT isbn, status
+									, RANK() OVER(PARTITION BY isbn ORDER BY rentalno DESC) AS `rank`
+										FROM rental) AS r
+								WHERE r.rank = 1
+								) AS rr
+		ON b.isbn = rr.isbn
+		WHERE 1=1
+		<if test="title != null and !title.equals('')">
+			and title like CONCAT('%', #{title}, '%')
+		</if>
+		<if test="author != null and !author.equals('')">
+			and author = #{author}
+		</if>
+			and b.status = 'Y'
+	</select>
+
+</mapper>

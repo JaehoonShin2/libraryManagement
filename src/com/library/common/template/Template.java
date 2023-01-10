@@ -33,8 +33,8 @@ public class Template {
 		
 	}
 	
-	public static SqlSessionFactory getSqlSessionFactory() {
-		return sqlSessionFactory;
+	public static SqlSession getSqlSession() {
+		return sqlSessionFactory.openSession(false);
 	}
 
 }

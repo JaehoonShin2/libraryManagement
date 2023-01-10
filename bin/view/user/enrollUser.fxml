@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.library.user.controller.InsertUserController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.library.user.controller.user.EnrollUserController">
    <children>
       <Button fx:id="_btn_enroll_user" defaultButton="true" layoutX="217.0" layoutY="498.0" mnemonicParsing="false" onMouseClicked="#__btn_enroll_user" prefHeight="30.0" prefWidth="87.0" text="회원가입" />
       <Button fx:id="_btn_cancel" layoutX="355.0" layoutY="498.0" mnemonicParsing="false" onMouseClicked="#__btn_cancel" prefHeight="30.0" prefWidth="50.0" text="취소" />

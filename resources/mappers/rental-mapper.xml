@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace : 해당 mapper 파일의 고유한 별칭, 식별자 -->
+<mapper namespace='rentalMapper'>
+
+	<resultMap id="rentalResultSet" type="rental">
+		<result property='rentalNo' column='rentalNo'/>
+        <result property='userNo' column='userNo' />
+        <result property='userId' column='userId' />
+        <result property='isbn' column='isbn'  />
+        <result property='title' column='title'  />
+        <result property='rentalDate' column='rentalDate' />
+        <result property='dueDate' column='dueDate' />
+        <result property='returnDate' column='returnDate' />
+        <result property='status' column='status' />
+	</resultMap>
+
+	<select id="selectRentalCount" parameterType="rental" resultType="int">
+		SELECT count(*)
+		FROM rental r
+		WHERE r.userNo = #{userNo}
+			and r.status = 'n'
+	</select>
+
+	<select id="select" parameterType="rental" resultMap="rentalResultSet">
+		SELECT rentalNo
+		, u.userNo
+		, u.userid
+		, b.isbn
+		, b.title
+		, DATE_FORMAT(rentaldate, '%Y-%m-%d') as `rentalDate`
+		, DATE_FORMAT(duedate, '%Y-%m-%d') as `dueDate`
+		, DATE_FORMAT(returndate, '%Y-%m-%d') as `returnDate`
+		, r.status
+		FROM rental r
+			join book b
+			ON r.isbn = b.isbn
+			join user u
+			on r.userNo = u.userNo
+		WHERE 1=1
+		<if test="rentalNo != 0">
+			and rentalNo = #{rentalNo}
+		</if>
+		<if test="userNo != 0">
+			and u.userNo = #{userNo}
+		</if>
+		<if test="isbn != null and !isbn.equals('')">
+			and b.isbn = #{isbn}
+		</if>
+		order by 1
+		limit 1
+		
+	</select>
+
+	<select id="selectList" parameterType="rental" resultMap="rentalResultSet">
+		SELECT rentalNo
+		, u.userNo
+		, u.userid
+		, b.isbn
+		, b.title
+		, DATE_FORMAT(rentaldate, '%Y-%m-%d') as `rentalDate`
+		, DATE_FORMAT(duedate, '%Y-%m-%d') as `dueDate`
+		, DATE_FORMAT(returndate, '%Y-%m-%d') as `returnDate`
+		, r.status
+		FROM rental r
+			join book b
+			ON r.isbn = b.isbn
+			join user u
+			on r.userNo = u.userNo
+		WHERE 1=1
+		<if test="userNo != 0">
+			and r.userNo = #{userNo}
+		</if>
+		<if test='userId != null'>
+			and u.userId = #{userId}
+		</if>
+		<if test='title != null'>
+			and b.title like CONCAT('%', #{title}, '%')
+		</if> 
+		<if test='status == "Y"'>
+			and r.status = 'Y'
+		</if>
+		<if test='status == "N"'>
+			and r.status = 'N'
+		</if>
+	</select>
+
+	<insert id="insert" parameterType="rental">
+		INSERT INTO RENTAL
+			VALUES(	default
+					, #{userNo}
+					, #{isbn}
+					, CURRENT_DATE()
+					, DATE_ADD(CURRENT_DATE(), interval 7 DAY)
+					, DEFAULT
+					, DEFAULT
+					)	
+	</insert>
+
+	<update id="update" parameterType="rental">
+		UPDATE RENTAL
+		SET status = 'Y'
+		, RETURNDATE = CURRENT_DATE()
+		WHERE rentalNo = #{rentalNo}
+			and status = 'N'
+	</update>
+	
+
+</mapper>

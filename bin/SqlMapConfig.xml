@@ -18,6 +18,8 @@
     
     <typeAliases>
         <typeAlias alias="user" type="com.library.common.vo.User" />
+        <typeAlias alias="rental" type="com.library.common.vo.Rental" />
+        <typeAlias alias="book" type="com.library.common.vo.Book" />
     </typeAliases>
     <environments default="development">
         <environment id="development">
@@ -35,6 +37,8 @@
     <mappers>
         <!-- 내 위치는  resourse 찾아야 하는 것은 mappers 부분 -->
         <mapper resource='mappers/user-mapper.xml' />
+        <mapper resource='mappers/book-mapper.xml' />
+        <mapper resource='mappers/rental-mapper.xml' />
     </mappers>
 
 </configuration>
