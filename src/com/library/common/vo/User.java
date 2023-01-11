@@ -33,11 +33,12 @@ public class User {
 	}
 
 
-	public User(String userId, String userPwd, String userName, String phone) {
+	public User(String userId, String userPwd, String userName, String phone, String gender) {
 		this.userId = userId;
 		this.userPwd= userPwd;
 		this.userName = userName;
 		this.phone = phone;
+		this.gender = gender;
 	}
 
 }

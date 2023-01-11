@@ -16,7 +16,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 
 public class EnrollUserController implements Initializable {
 
@@ -26,12 +28,28 @@ public class EnrollUserController implements Initializable {
 	@FXML private PasswordField _pf_pwd, _pf_check_pwd;
 	@FXML private Label _label_idCheck, _label_pwd;
 	@FXML private Button _btn_check_id, _btn_enroll_user, _btn_cancel;
-	private String userId, userPwd, userName, phone;
+    @FXML private RadioButton _radio_m, _radio_f;
+	private String userId, userPwd, userName, phone, gender;
 	private Boolean check_id_;
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		check_id_ = false;
+		_radio_f.setOnAction(e->{
+			if(_radio_f.isSelected()) {
+				_radio_m.setSelected(false);
+			} else {
+				_radio_m.setSelected(true);
+			}
+		});
+		_radio_m.setOnAction(e->{
+			if(_radio_m.isSelected()) {
+				_radio_f.setSelected(false);
+			} else {
+				_radio_f.setSelected(true);
+			}	
+		});
+		
 	}
 	
 	@FXML public void __btn_check_id() {
@@ -40,7 +58,7 @@ public class EnrollUserController implements Initializable {
 			User user = new User();
 			user.setUserId(userId);
 			User u = new UserService_Impl().select(user);
-			if( u != null ) {
+			if( u == null ) {
 				logger.info("사용가능");
 				_label_idCheck.setText("사용 가능한 아이디 입니다.");
 				check_id_ = true;
@@ -52,18 +70,24 @@ public class EnrollUserController implements Initializable {
 		}
 	
 	@FXML public void __btn_enroll_user() throws Exception {
-		
+
 		userPwd = _pf_pwd.getText();
 		String userCheckpwd = _pf_check_pwd.getText();
 		userName = _tf_userName.getText();
 		phone = _tf_phone.getText();
+		if(_radio_m.isSelected()) {
+			gender = "M";
+		} else if (_radio_f.isSelected()) {
+			gender = "F";
+		}
 		
 		if(userPwd.equals(userCheckpwd)
 				&& check_id_ 
 				&& !userName.equals("")
-				&& userName != null ) // && 정규표현식 결과가 맞다면 
+				&& userName != null
+				&& gender != null ) // && 정규표현식 결과가 맞다면 
 			{	
-			User user = new UserService_Impl().insert(new User(userId, userPwd, userName, phone));
+			User user = new UserService_Impl().insert(new User(userId, userPwd, userName, phone, gender));
 			logger.info("아이디 생성");
 			Scene scene = ShareData.getScene("loginform", "common/loginform");
 			ShareData.getStage().setScene(scene);

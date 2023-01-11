@@ -28,10 +28,13 @@
 		INSERT INTO user ( USERID
                            , USERPWD
                            , USERNAME
-                           , GENDER ) VALUES ( #{userId}
+                           , GENDER
+                           , phone
+                           ) VALUES ( #{userId}
                                            , #{userPwd}
                                            , #{userName}
                                            , #{gender}
+                                           , #{phone}
                                            )
 
     </insert>
@@ -39,16 +42,18 @@
     <update id="update" parameterType="user">
 	    	UPDATE USER
 	  	 	 <set>
-		      <if test="userPwd != null"> userPwd = #{userPwd}, </if>
-		      <if test="userName != null"> userName = #{userName},</if>
-		      <if test="phone != null"> phone = #{phone}, </if>
-		      <if test="gender != null"> gender = #{gender}, </if>
+		      <if test="userPwd != null and userPwd neq ''"> userPwd = #{userPwd}, </if>
+		      <if test="userName != null and userName neq ''"> userName = #{userName},</if>
+		      <if test="phone != null and phone neq ''"> phone = #{phone}, </if>
+		      <if test="gender != null and gender neq ''"> gender = #{gender}, </if>
 		      <if test="point != 0"> point = #{point}, </if>
 		      status = 'Y'
 		    </set>
 	    	WHERE 1=1
 	    		<if test="userNo != 0">and userNo = #{userNo} </if>
-	    		<if test="userId != null">and userId = #{userId} </if>
+	    		<if test="userId != null and userId neq ''" >
+				and u.userId = #{userId}
+				</if>
     </update>
     
     <update id="updatePoint" parameterType="user">
@@ -60,9 +65,10 @@
 	    		<if test="userNo != 0">
 	    		and userNo = #{userNo} 
 	    		</if>
-	    		<if test="userId != null">
-	    		and userId = #{userId}
+	    		<if test="userId != null and userId neq ''" >
+				and u.userId = #{userId}
 				</if>
+				
     </update>
     
     
@@ -70,8 +76,13 @@
     		UPDATE USER
     		SET STATUS = 'N'
     		WHERE 1=1
-    			<if test="userNo != 0">and userNo = #{userNo} </if>
-	    		<if test="userId != null">and userId = #{userId} </if>
+    			<if test="userNo != 0">
+    				and userNo = #{userNo} 
+    			</if>
+	    		<if test="userId != null and userId neq ''" >
+					and u.userId = #{userId}
+				</if>
+
     </update>
 
 
@@ -90,11 +101,13 @@
 			<if test="userNo != 0">
 				and u.userNo = #{userNo}
 			</if>
-			<if test="userId != null and userPwd != null" >
+			<if test="userId != null and userId neq ''" >
 				and u.userId = #{userId}
+			</if>
+			<if test="userPwd != null and userPwd neq ''">
 				and u.userPwd = #{userPwd}
 			</if>
-				and status = 'y'			
+				and status = 'y'		
     </select>
 
 	<select id="selectList" parameterType="user" resultMap="userResultSet">
@@ -113,12 +126,12 @@
 			    <if test="userNo != 0">
 			      AND userNo = #{userNo}
 			    </if>
-			    <if test="userId != null">
-			      AND userId = #{userId}
-			    </if>
-			    <if test="userName != null">
-			      AND userName like CONCAT('%', #{userName}, '%')
-			    </if>
+			    <if test="userId != null and userId neq ''" >
+				and u.userId = #{userId}
+				</if>
+				<if test="userPwd != null and userPwd neq ''">
+					and u.userPwd = #{userPwd}
+				</if>
 			      AND status = 'Y'
 
     </select>
