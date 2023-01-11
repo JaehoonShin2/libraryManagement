@@ -36,47 +36,27 @@ import javafx.scene.input.MouseButton;
 
 public class AdminRentalController implements Initializable{
 
-	@FXML
-    private Button _btn_rent_search;
-    @FXML
-    private TextField _tf_rent_keyword;
-    @FXML
-    private Label _label_id;
-    @FXML
-    private Hyperlink _hy_logout, _hy_mypage;
-    @FXML
-    private TableView<Rental> _tv_rent;
-    @FXML
-    private TableColumn<Rental, String> _tc_rent_brlNo, _tc_rent_title, _tc_rent_userId, _tc_rent_rentdate, _tc_rent_duedate;
-    @FXML
-    private DialogPane _dia_book;
-    @FXML
-    private Label _label_dia_title, _label_dia_page, _label_dia_author, _label_dia_price, _label_dia_translator, _label_dia_supplement,  _label_dia_rentYN;
-    @FXML
-    private Button _btn_dia_rent, _btn_dia_cancel;
-    @FXML
-    private DialogPane _dia_mypage;
-    @FXML
-    private PasswordField _pf_pwd;
-    @FXML
-    private Button _btn_dia_ok;
-    @FXML
-    private Button _btn_dia_pwd_cancel;
-    @FXML
-    private TableView<Rental> _tv_return;
-    @FXML
-    private TableColumn<Rental, String> _tc_return_brlNo, _tc_return_title, _tc_return_userId, _tc_return_rentdate, _tc_return_returnDate;
-    @FXML
-    private Button _btn_return_search;
-    @FXML
-    private TextField _tf_return_keyword;
-    @FXML
-    private ComboBox<String> _cb_rent, _cb_return;
+	@FXML private Button _btn_rent_search;
+    @FXML private TextField _tf_rent_keyword;
+    @FXML private Label _label_id;
+    @FXML private Hyperlink _hy_logout, _hy_mypage;
+    @FXML private TableView<Rental> _tv_rent;
+    @FXML private TableColumn<Rental, String> _tc_rent_brlNo, _tc_rent_title, _tc_rent_userId, _tc_rent_rentdate, _tc_rent_duedate;
+    @FXML private DialogPane _dia_book;
+    @FXML private Label _label_dia_title, _label_dia_page, _label_dia_author, _label_dia_price, _label_dia_translator, _label_dia_supplement,  _label_dia_rentYN;
+    @FXML private Button _btn_dia_rent, _btn_dia_cancel;
+    @FXML private DialogPane _dia_mypage;
+    @FXML private PasswordField _pf_pwd;
+    @FXML private Button _btn_dia_ok;
+    @FXML private Button _btn_dia_pwd_cancel;
+    @FXML private TableView<Rental> _tv_return;
+    @FXML private TableColumn<Rental, String> _tc_return_brlNo, _tc_return_title, _tc_return_userId, _tc_return_rentdate, _tc_return_returnDate;
+    @FXML private Button _btn_return_search;
+    @FXML private TextField _tf_return_keyword;
+    @FXML private ComboBox<String> _cb_rent, _cb_return;
     
 
     private static Logger logger = Logger.getLogger(AdminRentalController.class);
-	private String isbn;
-	private int brlNo;
 	private ObservableList<Rental> rentallist;
 	private ObservableList<Rental> returnlist;
 	private Alert alert;
@@ -87,11 +67,9 @@ public class AdminRentalController implements Initializable{
 	
 	private void selectRental(Rental rental) {
 		rental.setStatus("N");
-		logger.info(rental.toString());
 		ArrayList<Rental> list = new RentalService_impl().selectList(rental);
 		rentallist = FXCollections.observableArrayList();
 		for(Rental r : list) {
-			System.out.println(r.toString());
 			rentallist.add(r);
 		}
 		_tv_rent.setItems(rentallist);
@@ -100,11 +78,9 @@ public class AdminRentalController implements Initializable{
 	
 	private void selectReturn(Rental rental) {
 		rental.setStatus("Y");
-		logger.info(rental.toString());
 		ArrayList<Rental> list = new RentalService_impl().selectList(rental);
 		returnlist = FXCollections.observableArrayList();
 		for(Rental r : list) {
-			System.out.println(r.toString());
 			returnlist.add(r);
 		}
 		_tv_return.setItems(returnlist);
@@ -159,7 +135,6 @@ public class AdminRentalController implements Initializable{
 			rental.setTitle(keyword);
 		}
 		selectRental(rental);
-		
 		
 	}
 	

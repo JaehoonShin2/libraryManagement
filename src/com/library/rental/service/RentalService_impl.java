@@ -75,7 +75,6 @@ public class RentalService_impl {
 	}
 
 	public ArrayList<Rental> selectList(Rental rental) {
-		logger.info(rental.toString());
 		ArrayList<Rental> rList = rentalDao.selectList(rental);
 		sqlSession.close();
 		return rList;

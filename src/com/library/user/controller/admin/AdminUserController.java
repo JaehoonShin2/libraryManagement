@@ -57,11 +57,9 @@ public class AdminUserController implements Initializable{
 	private HashMap<String, String> map;
 	private String key_type;
 	private ObservableList<User> ulist;
-	private int userNo;
 	private Alert alert;
 	
 	private void selectList(User user) {
-		logger.info(user.toString());
 		ArrayList<User> list = new UserService_Impl().selectList(user);
 		if(list != null) {
 			ulist = FXCollections.observableArrayList();
@@ -75,7 +73,6 @@ public class AdminUserController implements Initializable{
 	
 	private void __user_search() {
 		key_type = map.get(_cb.getSelectionModel().getSelectedItem().toString());
-		logger.info(key_type);
 		String keyword = _tf_user_keyword.getText();
 		User user = new User();
 		if(key_type.equals("userId")) {

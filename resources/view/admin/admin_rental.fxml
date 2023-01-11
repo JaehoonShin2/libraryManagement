@@ -29,7 +29,7 @@
       <Hyperlink fx:id="_hy_logout" layoutX="849.0" layoutY="67.0" text="로그아웃" />
       <TableView fx:id="_tv_rent" layoutX="97.0" layoutY="213.0" prefHeight="218.0" prefWidth="807.0">
          <columns>
-            <TableColumn fx:id="_tc_rent_brlNo" prefWidth="82.0" text="BRLNO" />
+            <TableColumn fx:id="_tc_rent_brlNo" prefWidth="82.0" text="RENTALNO" />
             <TableColumn fx:id="_tc_rent_title" prefWidth="273.0" text="TITLE" />
             <TableColumn fx:id="_tc_rent_userId" prefWidth="111.0" text="USERID" />
             <TableColumn fx:id="_tc_rent_rentdate" prefWidth="113.0" text="대출날짜" />
@@ -139,7 +139,7 @@
       </DialogPane>
       <TableView fx:id="_tv_return" layoutX="97.0" layoutY="505.0" prefHeight="237.0" prefWidth="807.0">
          <columns>
-            <TableColumn fx:id="_tc_return_brlNo" prefWidth="82.0" text="BRLNO" />
+            <TableColumn fx:id="_tc_return_brlNo" prefWidth="82.0" text="RENTALNO" />
             <TableColumn fx:id="_tc_return_title" prefWidth="273.0" text="TITLE" />
             <TableColumn fx:id="_tc_return_userId" prefWidth="111.0" text="USERID" />
             <TableColumn fx:id="_tc_return_rentdate" prefWidth="113.0" text="대출날짜" />

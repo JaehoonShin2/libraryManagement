@@ -11,6 +11,7 @@ import com.library.common.template.FunctionTemplate;
 import com.library.common.vo.Book;
 import com.library.common.vo.ShareData;
 import com.library.common.vo.User;
+import com.library.user.service.UserService_Impl;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -34,44 +35,25 @@ import javafx.scene.input.MouseButton;
 public class AdminBookController implements Initializable{
 	
 	
-	@FXML
-    private Label _label_id;
-    @FXML
-    private Hyperlink _hy_logout, _hy_mypage;
-    @FXML
-    private TableView<Book> _tv_book;
-    @FXML
-    private TableColumn<Book, String> _tc_isbn, _tc_title, _tc_page, _tc_price;
-    @FXML
-    private Button _btn_search;
-    @FXML
-    private TextField _tf_keyword;
-    @FXML
-    private Button _btn_enroll;
+	@FXML private Label _label_id;
+    @FXML private Hyperlink _hy_logout, _hy_mypage;
+    @FXML private TableView<Book> _tv_book;
+    @FXML private TableColumn<Book, String> _tc_isbn, _tc_title, _tc_page, _tc_price;
+    @FXML private Button _btn_search;
+    @FXML private TextField _tf_keyword;
+    @FXML private Button _btn_enroll;
     
-    
-    @FXML
-    private DialogPane _dia_book;
-    @FXML
-    private Label _label_dia_title, _label_dia_page, _label_dia_author, _label_dia_price, _label_dia_translator, _label_dia_publisher, _label_dia_rentYN;
-    @FXML
-    private Button _btn_dia_ok, _btn_dia_delete;
+    @FXML private DialogPane _dia_book;
+    @FXML private Label _label_dia_title, _label_dia_page, _label_dia_author, _label_dia_price, _label_dia_translator, _label_dia_publisher, _label_dia_rentYN;
+    @FXML private Button _btn_dia_ok, _btn_dia_delete, _btn_dia_update;
 
-    
-    @FXML
-    private DialogPane _dia_enroll;
-    @FXML
-    private TextField _tf_title, _tf_page, _tf_price, _tf_author, _tf_translator, _tf_publisher, _tf_date;
-    @FXML
-    private Button _btn_dia_enroll, _btn_dia_cancel;
+    @FXML private DialogPane _dia_enroll;
+    @FXML private TextField _tf_title, _tf_page, _tf_price, _tf_author, _tf_translator, _tf_publisher, _tf_date;
+    @FXML private Button _btn_dia_enroll, _btn_dia_cancel;
 
-    @FXML
-    private DialogPane _dia_mypage;
-    @FXML
-    private PasswordField _pf_pwd;
-    @FXML
-    private Button _btn_dia_pwd_ok,  _btn_dia_pwd_cancel;
-    
+    @FXML private DialogPane _dia_update;
+    @FXML private TextField _tf_update_title, _tf_update_page, _tf_update_price, _tf_update_author, _tf_update_translator, _tf_update_publisher, _tf_update_date;
+    @FXML private Button _btn_dia_upd_ok,  _btn_dia_upd_cancel;
     
     private static Logger logger = Logger.getLogger(AdminBookController.class);
 	private String bisbn;
@@ -104,8 +86,8 @@ public class AdminBookController implements Initializable{
 			b.setIsbn(FunctionTemplate.ranISBN());
 			b.setTitle(_tf_title.getText());
 			b.setDate(_tf_date.getText());
-			b.setPage(Integer.parseInt(_tf_page.getText()));
-			b.setPrice(Integer.parseInt(_tf_price.getText()));
+			if ( _tf_page.getText() != null) { b.setPage(Integer.parseInt(_tf_page.getText()));};
+			if (_tf_price.getText() != null) { b.setPrice(Integer.parseInt(_tf_page.getText()));};
 			b.setAuthor(_tf_author.getText());
 			b.setTranslator(_tf_translator.getText());
 			b.setPublisher(_tf_publisher.getText());
@@ -125,7 +107,7 @@ public class AdminBookController implements Initializable{
 				alert = new Alert(AlertType.CONFIRMATION);
 				alert.setHeaderText("안내창");
 				alert.setContentText("도서 등록에 오류가 발생했습니다.");
-				alert.setTitle("확인");
+	 			alert.setTitle("확인");
 				alert.showAndWait();
 			}
 		});
@@ -148,13 +130,44 @@ public class AdminBookController implements Initializable{
 						if(e1.getClickCount() == 2) {
 							if(book != null) {
 								_dia_book.setVisible(true);
-								setLabelText(_label_dia_title, book.getTitle());
-								setLabelText(_label_dia_author, book.getAuthor());
-								setLabelText(_label_dia_page, String.valueOf(book.getPage()));;
-								setLabelText(_label_dia_price, String.valueOf(book.getPrice()));;
-								setLabelText(_label_dia_publisher, book.getPublisher());
-								setLabelText(_label_dia_translator, book.getTranslator());
-								setLabelText(_label_dia_rentYN, book.getRentYN());
+								setLabelsText(book);
+								
+								_btn_dia_update.setOnAction(e2 -> {
+									
+										_dia_update.setVisible(true);
+										setTextFiedText(_tf_update_title, book.getTitle());
+										setTextFiedText(_tf_update_date, book.getDate());
+										setTextFiedText(_tf_update_page, String.valueOf(book.getPage()));
+										setTextFiedText(_tf_update_price, String.valueOf(book.getPrice()));
+										setTextFiedText(_tf_update_author, book.getAuthor());
+										setTextFiedText(_tf_update_translator, book.getTranslator());
+										setTextFiedText(_tf_update_publisher, book.getPublisher());
+										
+										_btn_dia_upd_ok.setOnAction(e3->{
+
+											Book b = new Book();
+											b.setIsbn(book.getIsbn());
+											b.setTitle(_tf_update_title.getText());
+											b.setDate(_tf_update_date.getText());
+											if ( _tf_update_page.getText() != null) { b.setPage(Integer.parseInt(_tf_update_page.getText()));};
+											if (_tf_update_price.getText() != null) { b.setPrice(Integer.parseInt(_tf_update_price.getText()));};
+											b.setAuthor(_tf_update_author.getText());
+											b.setTranslator(_tf_update_translator.getText());
+											b.setPublisher(_tf_update_publisher.getText());
+											Book nB = new BookService_Impl().update(b);
+											if(nB == null) {
+												logger.info("book update error");
+											}
+											_dia_update.setVisible(false);
+											setLabelsText(nB);
+											selectList(new Book(_tf_keyword.getText()));
+										});
+										
+										_btn_dia_upd_cancel.setOnAction(e3->{
+											_dia_update.setVisible(false);
+										});
+
+								});
 								
 								_btn_dia_ok.setOnAction( e2 -> {
 									_dia_book.setVisible(false);
@@ -165,9 +178,9 @@ public class AdminBookController implements Initializable{
 									// 현재 도서의 대출가능여부가 'Y' 때
 									if(book.getRentYN().equals("Y")){
 										Book b = new BookService_Impl().delete(book);
-											if(b != null) {
+											if(b == null) {
 											_dia_book.setVisible(false);
-											selectList(null);
+											selectList(new Book());
 										}
 									} else {
 										alert = new Alert(AlertType.CONFIRMATION);
@@ -190,6 +203,16 @@ public class AdminBookController implements Initializable{
 				new PropertyValueFactory<Book, String>(col));
 	}
 
+	public void setLabelsText(Book book) {
+		setLabelText(_label_dia_title, book.getTitle());
+		setLabelText(_label_dia_author, book.getAuthor());
+		setLabelText(_label_dia_page, String.valueOf(book.getPage()));;
+		setLabelText(_label_dia_price, String.valueOf(book.getPrice()));;
+		setLabelText(_label_dia_publisher, book.getPublisher());
+		setLabelText(_label_dia_translator, book.getTranslator());
+		setLabelText(_label_dia_rentYN, book.getRentYN());
+	}
+	
 	private void setLabelText(Label label, String s) {
 		label.setText(s);
 	}
@@ -202,7 +225,7 @@ public class AdminBookController implements Initializable{
 		// dialog는 시작 시 Visible = false
 		_dia_book.setVisible(false);
 		_dia_enroll.setVisible(false);
-		_dia_mypage.setVisible(false);
+		_dia_update.setVisible(false);
 		
 		setTextFiedText(_tf_keyword, null);
 		setTextFiedText(_tf_title, null);

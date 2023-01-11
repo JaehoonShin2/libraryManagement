@@ -32,6 +32,10 @@ public class BookDao {
 		return sqlSession.update("bookMapper.delete", book);
 	}
 
+	public int update(Book book) {
+		return sqlSession.update("bookMapper.update", book);
+	}
+
 	
 	
 }

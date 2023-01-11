@@ -28,14 +28,12 @@
 				,  #{title}
 				, #{date}
 				, #{page}
-				, #{page}
 				, #{price}
 				, #{author}
 				, #{translator}
 				, #{publisher}
 				, #{bimgurl}
 				, default
-				default
 			)
 
     </insert>
@@ -43,15 +41,15 @@
     <update id="update" parameterType="book">
    		update book
    		<set>
-   			<if test=""> ,</if>
-   			<if test=""> ,</if>
-   			<if test=""> ,</if>
-   			<if test=""> ,</if>
-   			<if test=""> ,</if>
-   			<if test=""> ,</if>
+   			<if test="title != null and title neq ''"> title = #{title},</if>
+   			<if test="date != null and date neq ''"> date=#{date},</if>
+   			<if test='page != 0'> page = #{page},</if>
+   			<if test='price != 0'> price = #{price},</if>
+   			<if test="author != null and author neq ''"> author = #{author},</if>
+   			<if test="translator != null and translator neq ''"> translator = #{translator} ,</if>
+   			<if test="publisher != null and publisher neq ''"> publisher = #{publisher} ,</if>
    		</set>
-   		where 1=1
-   			and isbn = #{isbn}
+   		where isbn = #{isbn}
     </update> 
 
     <update id="delete" parameterType="book">
@@ -88,10 +86,10 @@
 								) AS rr
 		ON b.isbn = rr.isbn
 		WHERE 1=1
-		<if test="title != null and !title.equals('')">
+		<if test="title != null and title neq ''">
 			and title like CONCAT('%', #{title}, '%')
 		</if>
-		<if test="author != null and !author.equals('')">
+		<if test="author != null and author neq ''">
 			and author = #{author}
 		</if>
 			and b.status = 'Y'

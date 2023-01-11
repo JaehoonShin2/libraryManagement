@@ -38,7 +38,7 @@
             <TableColumn fx:id="_tc_maxRentalCount" prefWidth="131.0" text="최대대출권수" />
          </columns>
       </TableView>
-      <ComboBox fx:id="_cb" layoutX="453.0" layoutY="158.0" prefHeight="29.0" prefWidth="177.0" />
+      <ComboBox fx:id="_cb" layoutX="453.0" layoutY="158.0" prefHeight="29.0" prefWidth="177.0" promptText="검색 조건" />
       <DialogPane fx:id="_dia_mypage" layoutX="283.0" layoutY="172.0" prefHeight="141.0" prefWidth="354.0" visible="false">
          <header>
             <AnchorPane prefHeight="60.0" prefWidth="360.0">
